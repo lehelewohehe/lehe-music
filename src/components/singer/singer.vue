@@ -1,8 +1,8 @@
 <template>
-  <div class="l-singer">
+  <div class="l-singer" ref="lsinger">
     <loading v-if="!singerList.length" class="loading"> 
     </loading>
-    <scroll :data="singerList" v-if="singerList.length" @goclick>
+    <scroll :data="singerList" v-if="singerList.length" ref="wrapper"  :probeType=3 @scroll="goScrollPosition">
       <div class="singer-container">
         <div class="singer-item" v-for="item in singerList" :key="item.title">
           <div class="singer-title">{{ item.title }}</div>
@@ -15,9 +15,10 @@
         </div>
       </div>
     </scroll>
-    <div class="singer-rightsiderbar" @click="clickPosition">
+    <div class="singer-rightsiderbar" 
+    @touchstart.stop.prevent="touchStartPostion" @touchmove.stop.prevent="touchMovePosition">
       <ul>
-        <li v-for="item in singerList" :key="item.data.img1v1Url">{{ item.title }}</li>
+        <li v-for="(item, index) in singerList" :key="item.data.img1v1Url" v-bind:class="{ siderbaractive: index === currentIndex}">{{ item.title }}</li>
       </ul>
     </div>
   </div>
@@ -30,11 +31,11 @@ import Loading from 'base/loading/loading'
 export default {
   data() {
     return {
-      singerList: []
+      singerList: [],
+      currentIndex: 0
     }
   },
   created() {
-    this.currentIndex = 0
     this.singerScope = []
     this.getSingerList()
   },
@@ -48,10 +49,7 @@ export default {
             temp.push(new singersListType(item))
           })
           this.singerList = serialize(parseSingers(temp))
-          this.clacSingerBlockScope()
-          // this.singerList.forEach( (item, index) => {
-          //   console.log(item.title)
-          // })
+          this.clacSingerBlockScope()         
         }
       }).catch(error => {
         console.log(error)
@@ -62,7 +60,7 @@ export default {
       //根据所有的歌手数据计算
       this.singerScope.push(0)
       this.singerList.forEach((item, index) => {
-        let rollOutY = -(item.data.length * 16 )
+        let rollOutY = -(item.data.length * 56 + 16)
         let cumulative = rollOutY + temp
         this.singerScope.push(cumulative)
         temp = cumulative
@@ -71,11 +69,44 @@ export default {
     },
     clickPosition(ev) {
       // 获取到点击的点相对于侧边栏上y轴的坐标
-      let posY = ev.y - 120
+      let posY = ev.touches[0].pageY - 140
       // 计算当前点击的索引相对于所有索引的编号，从0开始
       this.currentIndex = parseInt(posY / 16)
-
-      this.$emit('goclick', this,singerScope[currentIndex])
+      // 边界特殊判断处理
+      if(this.currentIndex < 0 || this.currentIndex > 23) {
+        this.currentIndex < 0 ? this.currentIndex = 0 : this.currentIndex = 23
+      }
+      console.log(this.currentIndex)
+      console.log(this.singerScope[this.currentIndex])
+      //获取到滚动外层区域的高度，滚动区域内层的高度
+      let singerHight = this.$refs.wrapper.$el.clientHeight
+      let scrollHeight = this.singerScope[this.singerScope.length -1]
+      console.log(singerHight, scrollHeight)
+      // 当目标区域已经到达底部的时候，统一滚动到最后一屏
+      let flag = (this.singerScope[this.currentIndex] - scrollHeight) < singerHight
+      if(!flag) {
+        this.$refs.wrapper.scroll.scrollTo(0, this.singerScope[this.currentIndex])
+      } else {
+        this.$refs.wrapper.scroll.scrollTo(0, scrollHeight + singerHight)
+      }
+    },
+    touchStartPostion(ev){
+      this.clickPosition(ev)
+    },
+    touchMovePosition(ev) {
+      this.clickPosition(ev)
+    },
+    goScrollPosition(pos) {
+      // this.singerScope.forEach((item, index) => {
+      //   if(pos.y > item)
+      // })
+      for(var i = 0; i < this.singerScope.length - 1; i++) {
+        let start = this.singerScope[i]
+        let end = this.singerScope[i + 1]
+        if(pos.y < start && pos.y > end) {
+          this.currentIndex = i
+        }
+      }
     }
   },
   components: {
@@ -98,7 +129,7 @@ export default {
     height: 100%
     .singer-container
       width: 100%
-      padding: 10px
+      padding: 0 10px
       box-sizing: border-box
       .singer-item
         width: 100%
@@ -119,7 +150,10 @@ export default {
     top: 120px
     right: 5px
     height: 70%
-    border-radius: 2px
+    width: 16px
+    border-radius: 5px
+    border-sizing: border-box
+    padding: 20px 0px
     background-color: $color-background-d 
     li
       padding: 2px
@@ -135,4 +169,6 @@ img
   top:50%
   transform: translate(-50%, -50%)
   -webkit-transiform: translate(-50%, -50%)
+.siderbaractive
+  color: $color-theme
 </style>

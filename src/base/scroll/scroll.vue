@@ -25,10 +25,6 @@ export default {
     probeType: {
       type: Number,
       default: 1
-    },
-    preventDefault: {
-      type: Boolean,
-      default: false
     }
   },
   created() {
@@ -55,6 +51,13 @@ export default {
         click: this.click,
         probeType: this.probeType
       })
+      //监听scroll事件并且将其派发个父组件处理
+      if (this.scroll) {
+        let me = this
+        this.scroll.on('scroll', (pos) => {
+          me.$emit('scroll', pos)
+        })
+      }
     },
     disable() {
         this.scroll && this.scroll.disable()
