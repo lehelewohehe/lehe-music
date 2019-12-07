@@ -38,3 +38,15 @@ export class singersListType {
     this.musicSize = musicSize
   }
 }
+
+
+// 排行榜列表摘要数据
+export class rankListType {
+  constructor({id, name, coverImgUrl , tracks, trackUpdateTime}) {
+    this.id = id,
+    this.name = name,
+    this.coverImgUrl = coverImgUrl,
+    this.tracks = tracks,
+    this.trackUpdateTime = trackUpdateTime
+  }
+}

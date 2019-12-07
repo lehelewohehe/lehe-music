@@ -76,12 +76,12 @@ export default {
       if(this.currentIndex < 0 || this.currentIndex > 23) {
         this.currentIndex < 0 ? this.currentIndex = 0 : this.currentIndex = 23
       }
-      console.log(this.currentIndex)
+      // console.log(this.currentIndex)
       console.log(this.singerScope[this.currentIndex])
       //获取到滚动外层区域的高度，滚动区域内层的高度
       let singerHight = this.$refs.wrapper.$el.clientHeight
       let scrollHeight = this.singerScope[this.singerScope.length -1]
-      console.log(singerHight, scrollHeight)
+      // console.log(singerHight, scrollHeight)
       // 当目标区域已经到达底部的时候，统一滚动到最后一屏
       let flag = (this.singerScope[this.currentIndex] - scrollHeight) < singerHight
       if(!flag) {
@@ -97,9 +97,6 @@ export default {
       this.clickPosition(ev)
     },
     goScrollPosition(pos) {
-      // this.singerScope.forEach((item, index) => {
-      //   if(pos.y > item)
-      // })
       for(var i = 0; i < this.singerScope.length - 1; i++) {
         let start = this.singerScope[i]
         let end = this.singerScope[i + 1]

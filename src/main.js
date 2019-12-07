@@ -9,6 +9,8 @@ import FastClick from 'fastclick'
 
 import 'mint-ui/lib/style.css'
 import { Swipe, SwipeItem } from 'mint-ui'
+import { Search } from 'mint-ui'
+
 
 // 处理移动端click事件300毫秒延迟
 FastClick.attach(document.body)
@@ -32,6 +34,7 @@ Vue.use(VueAxios,axios)
 // 全局加载mint-ui插件
 Vue.component(Swipe.name, Swipe)
 Vue.component(SwipeItem.name, SwipeItem)
+Vue.component(Search.name, Search)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
