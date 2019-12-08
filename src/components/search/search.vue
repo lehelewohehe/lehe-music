@@ -5,13 +5,15 @@
         <div class="search-data-container" >
           <a class="mint-cell" v-for="item in searchSingerResult">
             <div class="mint-cell-wrapper">
-              <span class="mint-cell-text"><i class="fa fa-user"></i></span>
-              <div class="mint-cell-value"><span>{{ item.name }}</span></div> 
+              <i class="fa fa-user"></i>
+              <span class="mint-cell-text">{{ item.name }}</span>
+              <div class="mint-cell-value"><span></span></div> 
             </div>
           </a>
           <a class="mint-cell" v-for="item in searchSongResult">
             <div class="mint-cell-wrapper">
-              <span class="mint-cell-text"><i class="fa fa-music"></i> {{ item.title }}</span>
+              <i class="fa fa-music"></i>
+              <span class="mint-cell-text"> {{ item.title }}</span>
               <div class="mint-cell-value"><span>{{ item.name }}</span></div> 
             </div>
           </a>
@@ -112,6 +114,7 @@ export default {
       background-color: $color-highlight-background
       i
         font-size: $font-size-medium-x
+        height: 100%
       .mint-searchbar-core
         border: 2px solid $color-theme
         background-color: $color-background
@@ -122,14 +125,18 @@ export default {
     .mint-searchbar-cancel
       color: $color-theme
   .mint-search-list
-    padding: 140px 10px 0px
+    padding: 5px 10px 0px
     box-sizing: border-box
+    margin-top: 140px
     .wrapper
       overflow: hidden
       position: fixed
       top: 140px
       bottom: 0px
       width: 100%
+      padding: 0 10px
+      left: 0
+      box-sizing: border-box
   .hot-key
     display: flex
     margin-top: 20px
@@ -143,15 +150,19 @@ export default {
 
 .mint-cell
   background-color: $color-background
-  .mint-cell-wrapper  
+  .mint-cell-wrapper
+    color: $color-text-l  
+    background-image: none!important
+    border-bottom: 1px solid $color-dialog-background
     .mint-cell-text
       font-size: $font-size-medium
       color: $color-text-l
       flex-grow: 0
+      padding-left: 3px
     .mint-cell-value
       flex-grow: 0
       font-size: $font-size-small-s
       padding-left: 10px
-.mint-cell:last-child
-  background-image: none
+.mint-cell
+  background-image: none!important
 </style>

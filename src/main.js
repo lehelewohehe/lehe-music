@@ -26,7 +26,7 @@ Vue.use(VueLazyLoad, {
 Vue.config.productionTip = false
 
 // axios的全局配置
-axios.defaults.baseURL = 'http://localhost:3000/'
+axios.defaults.baseURL = 'http://192.168.0.104:3000/'
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 // 挂载axios
 Vue.use(VueAxios,axios)

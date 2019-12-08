@@ -5,7 +5,7 @@
   "author": "lehelewohehe",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --host 192.168.0.104",
     "start": "npm run dev",
     "build": "node build/build.js"
   },

@@ -6,7 +6,7 @@
       <div class="singer-container">
         <div class="singer-item" v-for="item in singerList" :key="item.title">
           <div class="singer-title">{{ item.title }}</div>
-          <div class="singer-body" v-for="subItem in item.data" :key="subItem.id">
+          <div class="singer-body" v-for="subItem in item.data" :key="subItem.id" @click="jumpRouting(subItem.id)">
             <div class="singer-body-item">
               <img v-lazy="subItem.img1v1Url" alt="">
               <span class="item-name">{{ subItem.name }}</span>
@@ -104,6 +104,9 @@ export default {
           this.currentIndex = i
         }
       }
+    },
+    jumpRouting(id) {
+      this.$router.push({ name: "songList", params: { id } })
     }
   },
   components: {

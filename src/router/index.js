@@ -9,6 +9,7 @@ import Search from 'components/search/search'
 import Rank from 'components/rank/rank'
 import Recommend from 'components/recommend/recommend'
 import Singer from 'components/singer/singer'
+import SongList from 'base/song-list/song-list'
 
 export default new Router({
   routes: [
@@ -35,7 +36,11 @@ export default new Router({
       path: '/search',
       name: 'search',
       component: Search
+    },
+    {
+      path: '/singer/:id',
+      name: 'songList',
+      component: SongList
     }
-    
   ]
 })
