@@ -50,3 +50,31 @@ export class rankListType {
     this.trackUpdateTime = trackUpdateTime
   }
 }
+
+
+//搜索结果歌曲数据
+export class searchSongListType {
+  constructor({id, name, artists}) {
+    this.id = id,
+    this.title = name,
+    this.artists = artists
+    this.name = spliceSring(artists)
+    this.type = 1
+  }
+}
+//搜索结果歌手数据
+export class searchSingerListType {
+  constructor({id, name}) {
+    this.id = id,
+    this.name = name
+    this.type = 100
+  }
+}
+
+function spliceSring(list) {
+  let sub = []
+  list.forEach(item => {
+    sub.push(item.name)
+  })
+  return sub.join('/')
+}

@@ -1,18 +1,157 @@
 <template>
-    <div class="l-search">
-      <mt-search v-model="value"></mt-search>
-    </div>
-  </template>
-  <script>
-  export default {
-    data() {
-      return {
-        value: ''
-      }
+  <div class="l-search">
+    <mt-search v-model="value">
+      <scroll :data="searchSingerResult" v-if="value.length">
+        <div class="search-data-container" >
+          <a class="mint-cell" v-for="item in searchSingerResult">
+            <div class="mint-cell-wrapper">
+              <span class="mint-cell-text"><i class="fa fa-user"></i></span>
+              <div class="mint-cell-value"><span>{{ item.name }}</span></div> 
+            </div>
+          </a>
+          <a class="mint-cell" v-for="item in searchSongResult">
+            <div class="mint-cell-wrapper">
+              <span class="mint-cell-text"><i class="fa fa-music"></i> {{ item.title }}</span>
+              <div class="mint-cell-value"><span>{{ item.name }}</span></div> 
+            </div>
+          </a>
+        </div>
+      </scroll>
+    </mt-search>
+    <div class="hot-key" v-if="!value.length">
+      <span class="hot-key-item needsclick" v-for="item in hotKey" @click="autoFillKey">{{ item.first }}</span>
+    </div>  
+  </div>
+</template>
+<script>
+import { searchSongListType, searchSingerListType } from 'api/objectType.js'
+import Scroll from 'base/scroll/scroll'
+import Loading from 'base/loading/loading'
+export default {
+  data() {
+    return {
+      value: '',
+      searchSongResult: [],
+      searchSingerResult: [],
+      hotKey: [],
     }
+  },
+  created() {
+    this.getHotKey()
+  },
+  methods: {
+    getSearchResult() {
+      this.axios.get(`search?keywords=${this.value}`).
+      then(res => {
+        let temp = []
+        if(res.data.code === 200) {
+          res.data.result.songs.forEach(item => {
+            temp.push(new searchSongListType(item))
+          })
+          this.searchSongResult = temp
+          console.log(this.searchSongResult)
+        }
+      }).catch(error => {
+        console.log(error)
+      })
+
+      this.axios.get(`search?keywords=${this.value}&type=100`).
+      then(res => {
+        let temp = []
+        if(res.data.code === 200) {
+          res.data.result.artists.forEach(item => {
+            temp.push(new searchSingerListType(item))
+          })
+          this.searchSingerResult = temp
+          console.log(this.searchSingerResult)
+          console.log(res)
+        }
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    getHotKey () {
+      this.axios.get('search/hot').
+      then(res => {
+        console.log(res)
+        if(res.data.code === 200) {
+          this.hotKey = res.data.result.hots
+          console.log(this.hotKey)
+        }
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    autoFillKey(e) {
+      console.log(e.target.innerHTML)
+      this.value = e.target.innerHTML
+    }
+  },
+  watch: {
+    value: function() {
+      this.getSearchResult()
+    }
+  },
+  components: {
+    Scroll,
+    Loading
   }
-  </script>
-  <style lang="stylus" rel="stylesheet/stylus" scoped>
-  
-  
-  </style>
+}
+</script>
+<style lang="stylus" rel="stylesheet/stylus" >
+@import "~common/stylus/variable";
+.l-search
+  padding: 10px
+  .mint-search
+    height: 100%
+  .mint-searchbar
+    background-color: $color-highlight-background
+    border-radius: 5px
+    padding: 6px
+    .mint-searchbar-inner
+      background-color: $color-highlight-background
+      i
+        font-size: $font-size-medium-x
+      .mint-searchbar-core
+        border: 2px solid $color-theme
+        background-color: $color-background
+        border-radius: 5px
+        color: $color-text
+        padding-left: 5px
+        margin-left: 3px
+    .mint-searchbar-cancel
+      color: $color-theme
+  .mint-search-list
+    padding: 140px 10px 0px
+    box-sizing: border-box
+    .wrapper
+      overflow: hidden
+      position: fixed
+      top: 140px
+      bottom: 0px
+      width: 100%
+  .hot-key
+    display: flex
+    margin-top: 20px
+    flex-wrap: wrap
+    .hot-key-item 
+      padding: 2px 5px
+      margin: 5px
+      background-color: $color-dialog-background
+      border-radius: 5px
+      font-size: $font-size-small
+
+.mint-cell
+  background-color: $color-background
+  .mint-cell-wrapper  
+    .mint-cell-text
+      font-size: $font-size-medium
+      color: $color-text-l
+      flex-grow: 0
+    .mint-cell-value
+      flex-grow: 0
+      font-size: $font-size-small-s
+      padding-left: 10px
+.mint-cell:last-child
+  background-image: none
+</style>
