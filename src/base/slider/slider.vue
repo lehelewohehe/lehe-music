@@ -42,6 +42,7 @@
 .l-slider
   width: 100%
   padding: 1%
+  box-sizing: border-box
   .mint-swipe-item
     height: auto
     a

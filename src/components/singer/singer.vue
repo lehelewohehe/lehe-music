@@ -106,7 +106,7 @@ export default {
       }
     },
     jumpRouting(id) {
-      this.$router.push({ name: "songList", params: { id } })
+      this.$router.push({ name: "singerDetails", params: { id } })
     }
   },
   components: {

@@ -102,6 +102,7 @@ export default {
 </script>
 <style lang="stylus" rel="stylesheet/stylus" >
 @import "~common/stylus/variable";
+@import "~common/stylus/mixin";
 .l-search
   padding: 10px
   .mint-search
@@ -151,18 +152,21 @@ export default {
 .mint-cell
   background-color: $color-background
   .mint-cell-wrapper
-    color: $color-text-l  
+    color: $color-text  
     background-image: none!important
     border-bottom: 1px solid $color-dialog-background
     .mint-cell-text
       font-size: $font-size-medium
-      color: $color-text-l
-      flex-grow: 0
-      padding-left: 3px
+      color: $color-text
+      padding-left: 5px
+      max-width: 60%
+      no-wrap()
     .mint-cell-value
-      flex-grow: 0
       font-size: $font-size-small-s
       padding-left: 10px
+      max-width: 30%
+      span
+        no-wrap()
 .mint-cell
   background-image: none!important
 </style>

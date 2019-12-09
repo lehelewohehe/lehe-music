@@ -7,7 +7,7 @@
       <div v-if="songsList.length">
         <div class="recommend-list-head">歌单推荐</div>
         <div class="recommend-list-body">
-          <div class="recommend-list-item" v-for="item in songsList" :key="item.picUrl">
+          <div class="recommend-list-item" v-for="item in songsList" :key="item.picUrl" @click="jumpRouting(item.id)">
             <span>{{ item.playCount | parseNumber }}</span>
             <img v-lazy="item.picUrl" alt="">
             <h3>{{ item.name }}</h3>
@@ -101,7 +101,10 @@
         .catch( error => {
           console.log(error)
         })
-      }
+      },
+      jumpRouting(id) {
+      this.$router.push({ name: "songsDetails", params: { id } })
+    }
     },
     filters: {
       parseNumber(data) {

@@ -4,7 +4,7 @@
     </loading>
     <scroll :data="rankAbstractList" v-if="rankAbstractList.length">
       <div class="rank-container">
-        <div class="rank-item" v-for="item in rankAbstractList" :key="item.coverImgUrl">
+        <div class="rank-item" v-for="item in rankAbstractList" :key="item.coverImgUrl" @click="jumpRouting(item.id)">
           <div class="rank-item-left">
             <img v-lazy="item.coverImgUrl" alt="">
           </div>
@@ -17,7 +17,7 @@
   </div>
 </template>
 <script>
-  import { rankListType } from 'api/objectType.js'
+  import { rankListType, rankId } from 'api/objectType.js'
   import Scroll from 'base/scroll/scroll'
   import Loading from 'base/loading/loading'
   export default {
@@ -44,7 +44,8 @@
                 {"first": "无", "second": "无"}
               ]
              }
-             temp.push(new rankListType(item)) 
+             item.id = rankId[item.name]
+             temp.push(new rankListType(item))
            })
          }
          this.rankAbstractList = temp
@@ -52,6 +53,9 @@
         }).catch( error => {
           console.log(error)
         })
+      },
+      jumpRouting(id) {
+        this.$router.push({ name: "rankDetails", params: { id } })
       }
     },
     components: {
@@ -62,6 +66,7 @@
 </script>
 <style lang="stylus" rel="stylesheet/stylus" scoped>
 @import "~common/stylus/variable";
+@import "~common/stylus/mixin";
 .l-rank
   overflow: hidden
   position: fixed
@@ -87,6 +92,7 @@
         padding: 10px 20px
         p
           font-size: $font-size-small
+          no-wrap()
  .loading
    position: fixed
    left: 50%
