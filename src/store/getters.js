@@ -1,0 +1,1 @@
+export const isSmall = state => state.isSmall

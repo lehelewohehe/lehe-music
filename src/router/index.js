@@ -12,6 +12,8 @@ import Singer from 'components/singer/singer'
 import SingerDetails from 'components/singer-details/singer-details'
 import SongsDetails from 'components/songs-details/songs-details'
 import RankDetails from 'components/rank-details/rank-details'
+import FillPlayer from 'components/fill-player/fill-player'
+
 export default new Router({
   routes: [
     {
@@ -52,6 +54,11 @@ export default new Router({
       path: '/rank/:id',
       name: 'rankDetails',
       component: RankDetails
+    },
+    {
+      path: '/player/:id',
+      name: 'fillPlayer',
+      component: FillPlayer
     }
   ]
 })

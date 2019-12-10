@@ -1,7 +1,7 @@
 <template>
     <div class="l-singer-details">
       <song-list :info="singerInfo" :songs="singerSongsList">
-        <div class="list-view-item" v-for="(item, index) in singerSongsList">
+        <div class="list-view-item" v-for="(item, index) in singerSongsList" @click="jumpPlayer(item.id)">
           <div class="view-item-code">{{ index + 1 }}</div>
           <div class="view-item-song">
             <div class="song-name">{{ item.name }}</div>
@@ -14,6 +14,7 @@
  <script>
  import SongList from 'base/song-list/song-list'
  import { singerSongsListType, singerInfoType } from 'api/objectType.js'
+ import {mapMutations} from 'vuex'
  export default {
    data() {
      return {
@@ -42,7 +43,14 @@
        }).catch(error =>{
          console.log(errot)
        })
-     }
+     },
+     jumpPlayer(id) {
+       this.setIsSmall(false)
+       this.$router.push({ name: "fillPlayer", params: { id } })
+     },
+    ...mapMutations({
+      setIsSmall: 'SET_ISSMALL'
+    })
    },
    components: {
      SongList

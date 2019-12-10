@@ -5,11 +5,14 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueLazyLoad from 'vue-lazyload'
 import FastClick from 'fastclick'
+import store from './store'
 
 
 import 'mint-ui/lib/style.css'
 import { Swipe, SwipeItem } from 'mint-ui'
 import { Search } from 'mint-ui'
+import { Progress } from 'mint-ui'
+
 
 
 // 处理移动端click事件300毫秒延迟
@@ -31,13 +34,16 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 // 挂载axios
 Vue.use(VueAxios,axios)
 
-// 全局加载mint-ui插件
+// 全局加载mint-ui组件
 Vue.component(Swipe.name, Swipe)
 Vue.component(SwipeItem.name, SwipeItem)
 Vue.component(Search.name, Search)
+Vue.component(Progress.name, Progress)
+console.log(store)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  store,
   render: h => h(App)
 })

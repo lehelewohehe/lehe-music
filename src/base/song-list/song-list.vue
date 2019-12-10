@@ -43,7 +43,7 @@ export default {
     goBack() {
       this.$router.go(-1)
     },
-    setBgmRelevant() {
+    setBgmRelevant(pos) {
       if(this.flag) {
         // bgm最大高度
         this.maxHeight = this.$refs.bgm.clientHeight
@@ -54,10 +54,11 @@ export default {
       //并且到某个位置隐藏播放按钮
       //计算歌单列表滚出去的高度
       //获取滚动组件实例和song-list-bgm元素标签实例,获取播放按钮元素对象
-      let scroll = this.$refs.wrapper.scroll
+      // let scroll = this.$refs.wrapper.scroll
       let bgm = this.$refs.bgm
       let play = this.$refs.play
-      let scrollHeight = scroll.y
+      // let scrollHeight = scroll.y
+      let scrollHeight = pos.y
       // bgm实际高度
       let bgmHeight = scrollHeight + this.maxHeight
       if( bgmHeight > 40 ) {

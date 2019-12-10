@@ -5,17 +5,20 @@
     <transition name="lehe">
       <router-view></router-view>
     </transition>
+    <narrow-player></narrow-player>
   </div>
 </template>
 
 <script>
 import LHeader from 'components/l-header/l-header'
 import Tab from 'components/tab/tab'
+import NarrowPlayer from 'components/narrow-player/narrow-player'
 export default {
   name: 'App',
   components: {
     LHeader,
-    Tab
+    Tab,
+    NarrowPlayer
   }
 }
 </script>
