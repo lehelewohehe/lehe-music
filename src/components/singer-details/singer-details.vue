@@ -1,7 +1,7 @@
 <template>
     <div class="l-singer-details">
       <song-list :info="singerInfo" :songs="singerSongsList">
-        <div class="list-view-item" v-for="(item, index) in singerSongsList" @click="jumpPlayer(item.id)">
+        <div class="list-view-item" v-for="(item, index) in singerSongsList" @click="initSelectPlay(item.id, index)">
           <div class="view-item-code">{{ index + 1 }}</div>
           <div class="view-item-song">
             <div class="song-name">{{ item.name }}</div>
@@ -14,7 +14,7 @@
  <script>
  import SongList from 'base/song-list/song-list'
  import { singerSongsListType, singerInfoType } from 'api/objectType.js'
- import {mapMutations} from 'vuex'
+ import {mapActions} from 'vuex'
  export default {
    data() {
      return {
@@ -30,6 +30,7 @@
      getsingerDetailesList() {
        this.axios.get(`artists?id=${this.id}`)
        .then(res => {
+         console.log(res)
          let temp = []
          if(res.data.code === 200) {
            this.singerInfo = new singerInfoType(res.data.artist)
@@ -41,16 +42,29 @@
             console.log(this.singerSongsList)
          }
        }).catch(error =>{
-         console.log(errot)
+         console.log(error)
        })
      },
-     jumpPlayer(id) {
-       this.setIsSmall(false)
-       this.$router.push({ name: "fillPlayer", params: { id } })
+     initSelectPlay(id, index) {
+      //  this.setSequenceList(this.singerSongsList)
+      //  this.setCurrentIndex(index)
+      //  this.setCurrentSong(this.singerSongsList[index])
+      //  this.setFullScreen(true)
+      
+      let sequenceList = this.singerSongsList.slice()
+      let song = sequenceList[index]
+      this.selectPlay({index, song, sequenceList})
      },
-    ...mapMutations({
-      setIsSmall: 'SET_ISSMALL'
-    })
+    // ...mapMutations({
+    //   setFullScreen: 'SET_FULLSCREEN',
+    //   setSequenceList: 'SET_SEQUENCELIST',
+    //   setPlaying: 'SET_PLAYING',
+    //   setCurrentIndex: 'SET_CURRENTINDEX',
+    //   setCurrentSong: 'SET_CURRENTSONG'
+    // })
+    ...mapActions([
+      'selectPlay'
+    ])
    },
    components: {
      SongList

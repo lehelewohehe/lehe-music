@@ -7,7 +7,7 @@
     <div class="song-list-bgm" ref="bgm" >
       <div class="list-bgm-img" :style="`background-image: url(${info.img1v1Url})`"></div>
       <div class="list-bgm-shelter"></div>
-      <div class="list-bgm-play" ref="play"><i class="fa fa-play-circle-o"></i>随机播放全部</div>
+      <div class="list-bgm-play" ref="play" @click="initRandomPlay"><i class="fa fa-play-circle-o"></i>随机播放全部</div>
     </div>
     <scroll :data="songs" ref="wrapper" :probeType="probeType" @scroll="setBgmRelevant">
       <div class="song-list-view">
@@ -19,6 +19,7 @@
 <script>
 import Scroll from 'base/scroll/scroll'
 import Loading from 'base/loading/loading'
+import {mapActions} from 'vuex'
 export default {
   data() {
     return {
@@ -34,7 +35,6 @@ export default {
       type: Array,
       default: []
     }
-
   },
   created() {
     this.flag = true
@@ -65,7 +65,14 @@ export default {
         bgm.style.height = scrollHeight + this.maxHeight + 'px'
         play.style.opacity = (bgmHeight - 100) / (this.maxHeight - 100)
       }
-    }
+    },
+    initRandomPlay() {
+      let sequenceList = this.songs.slice()
+      this.randomPlay({sequenceList})
+    },
+    ...mapActions([
+    'randomPlay'
+    ])
   },
   components: {
     Scroll

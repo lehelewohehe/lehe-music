@@ -11,7 +11,7 @@ import store from './store'
 import 'mint-ui/lib/style.css'
 import { Swipe, SwipeItem } from 'mint-ui'
 import { Search } from 'mint-ui'
-import { Progress } from 'mint-ui'
+import { Range } from 'mint-ui'
 
 
 
@@ -38,8 +38,9 @@ Vue.use(VueAxios,axios)
 Vue.component(Swipe.name, Swipe)
 Vue.component(SwipeItem.name, SwipeItem)
 Vue.component(Search.name, Search)
-Vue.component(Progress.name, Progress)
-console.log(store)
+Vue.component(Range.name, Range)
+
+// console.log(store)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

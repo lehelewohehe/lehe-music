@@ -49,7 +49,7 @@ export default {
 <style lang="stylus" rel="stylesheet/stylus" scoped>
 @import "~common/stylus/variable";
 .l-player
-  .player-small
+.player-small
     height: 50px
     position: absolute
     left: 0

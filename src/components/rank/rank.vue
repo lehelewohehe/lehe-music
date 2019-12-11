@@ -76,7 +76,10 @@
   background-color: $color-background
   .wrapper
     width: 100%
-    height: 100%
+    position: fixed
+    top: 82px
+    bottom: 0px
+    overflow: hidden
     .rank-item
       display: flex
       padding: 5px

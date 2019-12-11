@@ -5,20 +5,26 @@
     <transition name="lehe">
       <router-view></router-view>
     </transition>
-    <narrow-player></narrow-player>
+    <player v-if="currentIndex >= 0"></player>
   </div>
 </template>
 
 <script>
 import LHeader from 'components/l-header/l-header'
 import Tab from 'components/tab/tab'
-import NarrowPlayer from 'components/narrow-player/narrow-player'
+import Player from 'components/player/player'
+import {mapGetters} from 'vuex'
 export default {
   name: 'App',
   components: {
     LHeader,
     Tab,
-    NarrowPlayer
+    Player
+  },
+  computed: {
+    ...mapGetters([
+      'currentIndex'
+    ])
   }
 }
 </script>

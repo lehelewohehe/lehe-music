@@ -126,7 +126,10 @@ export default {
   background-color: $color-background
   .wrapper
     width: 100%
-    height: 100%
+    position: fixed
+    top: 82px
+    bottom: 0px
+    overflow: hidden
     .singer-container
       width: 100%
       padding: 0 10px
@@ -147,7 +150,7 @@ export default {
             line-height: 45px
   .singer-rightsiderbar
     position: fixed
-    top: 120px
+    top: 100px
     right: 5px
     height: 70%
     width: 16px

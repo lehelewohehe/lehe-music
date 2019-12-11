@@ -152,11 +152,12 @@ function spliceSring(list) {
 
 // 歌手详情---歌单数据
 export class singerSongsListType {
-  constructor({id, name, ar}) {
+  constructor({id, name, ar, al}) {
     this.id = id,
     this.name = name
     this.ar = ar,
-    this.author = spliceSring(ar)
+    this.author = spliceSring(ar),
+    this.al = al
   }
 }
 
@@ -183,11 +184,12 @@ export class rankInfoType {
 
 // 排行榜详情---排行榜歌单数据
 export class rankSongsListType {
-  constructor({id, name, ar}) {
+  constructor({id, name, ar, al}) {
     this.id = id,
     this.name = name
     this.ar = ar,
-    this.author = spliceSring(ar)
+    this.author = spliceSring(ar),
+    this.al = al
   }
 }
 
@@ -203,10 +205,11 @@ export class songInfoType {
 
 // 歌单详情---歌单歌单数据
 export class songSongsListType {
-  constructor({id, name, ar}) {
+  constructor({id, name, ar, al}) {
     this.id = id,
     this.name = name
     this.ar = ar,
-    this.author = spliceSring(ar)
+    this.author = spliceSring(ar),
+    this.al = al
   }
 }

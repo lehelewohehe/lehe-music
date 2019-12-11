@@ -1,6 +1,6 @@
 <template>
   <div class="l-slider" ref="slider">
-    <mt-swipe :auto="400000" >
+    <mt-swipe :auto="4000" >
         <mt-swipe-item v-for="item in imgs" :key="imgs.pic"><a :href="item.url" class="needsclick" ref="swipeA"><img :src="item.pic" alt=""></a></mt-swipe-item>
     </mt-swipe>
   </div>
