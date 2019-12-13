@@ -1,7 +1,8 @@
 <template>
     <div class="l-singer-details">
       <song-list :info="rankInfo" :songs="rankSongsList">
-        <div class="list-view-item" v-for="(item, index) in rankSongsList">
+        <div class="list-view-item" v-for="(item, index) in rankSongsList" 
+        @click="initSelectPlay(item.id, index)">
           <div class="view-item-code">{{ index + 1 }}</div>
           <div class="view-item-song">
             <div class="song-name">{{ item.name }}</div>
@@ -14,6 +15,7 @@
  <script>
  import SongList from 'base/song-list/song-list'
  import { rankSongsListType, rankInfoType } from 'api/objectType.js'
+ import {mapActions} from 'vuex'
  export default {
    data() {
      return {
@@ -26,24 +28,32 @@
      this.getrankDetailesList()
    },
    methods: {
-     getrankDetailesList() {
-       this.axios.get(`top/list?idx=${this.id}`)
-       .then(res => {
-         console.log(res)
-         let temp = []
-         if(res.data.code === 200) {
-           this.rankInfo = new rankInfoType(res.data.playlist)
-             res.data.playlist.tracks.forEach(item => {
-             temp.push(new rankSongsListType(item))
-           })
-            this.rankSongsList = temp
-            console.log(this.rankInfo)
-            console.log(this.rankSongsList)
-         }
-       }).catch(error =>{
-         console.log(errot)
-       })
-     }
+    getrankDetailesList() {
+      this.axios.get(`top/list?idx=${this.id}`)
+      .then(res => {
+        console.log(res)
+        let temp = []
+        if(res.data.code === 200) {
+          this.rankInfo = new rankInfoType(res.data.playlist)
+            res.data.playlist.tracks.forEach(item => {
+            temp.push(new rankSongsListType(item))
+          })
+           this.rankSongsList = temp
+           console.log(this.rankInfo)
+           console.log(this.rankSongsList)
+        }
+      }).catch(error =>{
+        console.log(errot)
+      })
+    },
+    initSelectPlay(id, index) {
+      let sequenceList = this.rankSongsList.slice()
+      let song = sequenceList[index]
+      this.selectPlay({index, song, sequenceList})
+    },
+    ...mapActions([
+      'selectPlay'
+    ])
    },
    components: {
      SongList

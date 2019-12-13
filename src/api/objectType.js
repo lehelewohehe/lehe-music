@@ -128,8 +128,10 @@ export class searchSongListType {
     this.id = id,
     this.title = name,
     this.artists = artists
-    this.name = spliceSring(artists)
-    this.type = 1
+    this.name = spliceSring(artists),
+    this.author = this.name
+    this.type = 1,
+    this.al = { picUrl: 'https://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg' }
   }
 }
 // 搜索结果歌手数据
@@ -140,6 +142,17 @@ export class searchSingerListType {
     this.type = 100
   }
 }
+
+// 歌单详情---歌单歌单数据
+// export class songSongsListType {
+//   constructor({id, name, ar, al}) {
+//     this.id = id,
+//     this.name = name
+//     this.ar = ar,
+//     this.author = spliceSring(ar),
+//     this.al = al
+//   }
+// }
 
 // 数组字符串拼接函数
 function spliceSring(list) {

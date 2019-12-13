@@ -1,7 +1,8 @@
 <template>
     <div class="l-singer-details">
       <song-list :info="singerInfo" :songs="singerSongsList">
-        <div class="list-view-item" v-for="(item, index) in singerSongsList" @click="initSelectPlay(item.id, index)">
+        <div class="list-view-item" v-for="(item, index) in singerSongsList" 
+        @click="initSelectPlay(item.id, index)">
           <div class="view-item-code">{{ index + 1 }}</div>
           <div class="view-item-song">
             <div class="song-name">{{ item.name }}</div>

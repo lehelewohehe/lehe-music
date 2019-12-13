@@ -1,5 +1,7 @@
 import {MODE} from 'api/storeConfig'
 import { Toast } from 'mint-ui'
+import {saveFavoriteList, loadFavoriteList, loadSearchHistory} from 'api/localStorage'
+import { savePlayHistory, loadPlayHistory, saveSearchHistory} from '../api/localStorage'
 // 点击选择列表歌曲开始播放的多状态改变
 export const selectPlay = function({commit}, {index, song, sequenceList}) {
   commit('SET_PLAYING', true)
@@ -8,6 +10,8 @@ export const selectPlay = function({commit}, {index, song, sequenceList}) {
   commit('SET_SEQUENCELIST', sequenceList)
   commit('SET_FULLSCREEN', true)
   commit('SET_CURRENTLIST', sequenceList)
+  savePlayHistory(song)
+  commit('SET_PLAYHISTORY', loadPlayHistory())
 }
 
 // 以点击随机播放的方式开始播放歌曲
@@ -23,6 +27,8 @@ export const randomPlay = function ({commit}, {sequenceList}) {
   commit('SET_CURRENTLIST', randomList)
   commit('SET_CURRENTINDEX', index)
   commit('SET_CURRENTSONG', song)
+  savePlayHistory(song)
+  commit('SET_PLAYHISTORY', loadPlayHistory())
 }
 
 // 切换播放模式
@@ -72,3 +78,16 @@ export const switchSong = function({commit, state}, {num}) {
   commit('SET_CURRENTINDEX', index)
   commit('SET_CURRENTSONG', state.currentList[state.currentIndex])
 }
+
+// 增删喜爱列表
+export const saveFavorite = function({commit}, {song}) {
+  saveFavoriteList(song)
+  commit('SET_FAVORITELIST', loadFavoriteList())
+}
+
+
+// 更新播放历史
+// export const savePlay = function({commit}, {song}) {
+//   savePlayHistory(song)
+//   commit('SET_PLAYHISTORY', loadPlayHistory())
+// }

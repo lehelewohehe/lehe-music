@@ -15,7 +15,7 @@
             <mt-swipe-item>
               <scroll :data="lyric" ref="scroll">
                 <div class="lyric">
-                  <div class="lyric-item" v-for="item in lyric" :key="item.time">{{ item.oneLyric }}</div>
+                  <div class="lyric-item" v-for="(item, index) in lyric" :key="index">{{ item.oneLyric }}</div>
                 </div>
               </scroll>
             </mt-swipe-item>
@@ -35,7 +35,7 @@
           <i :class="{'btn-player': true, 'fa': true, 'fa-pause': !playing, 'fa-play': playing}" @click="changePlaying"></i>
           <!-- <i class="fa fa-play"></i> -->
           <i class="fa fa-forward" @click="switchSong({num: 1})"></i>
-          <i class="fa fa-heart-o btn-heart" @click=""></i>
+          <i :class="{'btn-heart': true, 'fa': true, 'fa-heart-o': !isFavorite, 'fa-heart': isFavorite, 'red': isFavorite }" @click="saveFavorite({song:currentSong})"></i>
         </div>
       </div>
     </div>
@@ -81,8 +81,13 @@ export default {
       'playing',
       'favoriteList',
       'mode'
-  ])
-
+  ]),
+  isFavorite: function() {
+      let index = this.favoriteList.findIndex((item) => {
+        return item.id === this.currentSong.id
+      })
+      return (index !== -1)
+    }
   },
   created() {
     console.log(this.currentSong)
@@ -101,7 +106,8 @@ export default {
     }),
     ...mapActions([
       'switchMode',
-      'switchSong'
+      'switchSong',
+      'saveFavorite'
     ]),
     getSongInfo() {
       this.axios.get(`song/url?id=${this.currentSong.id}`)
@@ -149,14 +155,14 @@ export default {
       if(this.fullScreen) {
         this.lyric.forEach((item, index) => {
         if(parseInt(item.time) === parseInt(this.audio.currentTime)) {
-          return this.$refs.scroll.scrollTo(0, (- index * 25), 500)
+          return this.$refs.scroll.scrollTo(0, (- index * 30), 500)
         }
       })
       }
     },
     updateCurrentTime() {
       this.initAudioInfo()
-    },
+    }
     // lyricPosition(pos) {
     //   if(pos.y > 0) return
     //   let index = parseInt((-pos.y) / 20)
@@ -238,7 +244,7 @@ export default {
               padding-bottom: 100%
               .lyric-item
                 padding: 5px
-                height: 25px
+                height: 30px
                 box-sizing: border-box
       .player-content-progress
         padding: 15px 0
@@ -325,4 +331,6 @@ export default {
   -moz-animation: rotation 3s linear infinite forwards
   -webkit-animation: rotation 3s linear infinite forwards
   -o-animation: rotation 3s linear infinite forwards
+.red
+  color: red
 </style>

@@ -3,14 +3,14 @@
     <mt-search v-model="value">
       <scroll :data="searchSingerResult" v-if="value.length">
         <div class="search-data-container" >
-          <a class="mint-cell" v-for="item in searchSingerResult">
+          <a class="mint-cell" v-for="item in searchSingerResult" @click="goSingerDetails(item.id)">
             <div class="mint-cell-wrapper">
               <i class="fa fa-user"></i>
               <span class="mint-cell-text">{{ item.name }}</span>
               <div class="mint-cell-value"><span></span></div> 
             </div>
           </a>
-          <a class="mint-cell" v-for="item in searchSongResult">
+          <a class="mint-cell" v-for="(item, index) in searchSongResult" @click="initSelectPlay(item.id, index)">
             <div class="mint-cell-wrapper">
               <i class="fa fa-music"></i>
               <span class="mint-cell-text"> {{ item.title }}</span>
@@ -29,6 +29,7 @@
 import { searchSongListType, searchSingerListType } from 'api/objectType.js'
 import Scroll from 'base/scroll/scroll'
 import Loading from 'base/loading/loading'
+import {mapActions} from 'vuex'
 export default {
   data() {
     return {
@@ -45,6 +46,7 @@ export default {
     getSearchResult() {
       this.axios.get(`search?keywords=${this.value}`).
       then(res => {
+        console.log(res)
         let temp = []
         if(res.data.code === 200) {
           res.data.result.songs.forEach(item => {
@@ -87,7 +89,18 @@ export default {
     autoFillKey(e) {
       console.log(e.target.innerHTML)
       this.value = e.target.innerHTML
-    }
+    },
+    initSelectPlay(id, index) {
+      let sequenceList = this.searchSongResult.slice()
+      let song = sequenceList[index]
+      this.selectPlay({index, song, sequenceList})
+    },
+    goSingerDetails(id) {
+      this.$router.push({ name: "singerDetails", params: { id } })
+    },
+    ...mapActions([
+      'selectPlay'
+    ])
   },
   watch: {
     value: function() {

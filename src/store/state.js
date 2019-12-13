@@ -10,7 +10,7 @@ export default  {
   currentSong: {},   //当前播放的歌
   currentIndex: -1,   //当前播放歌曲的索引
   fullScreen: true,   //播放器状态
-  playHistory: loadPlayHistory(),
-  favoriteList: loadFavoriteList(),
-  searchHistory: loadSearchHistory()
+  playHistory: loadPlayHistory(),   //  播放历史
+  favoriteList: loadFavoriteList(), //  喜爱列表
+  searchHistory: loadSearchHistory() // 搜索历史
 }

@@ -1,7 +1,8 @@
 <template>
   <div class="l-songs-details">
     <song-list :info="songInfo" :songs="songSongsList">
-      <div class="list-view-item" v-for="(item, index) in songSongsList">
+      <div class="list-view-item" v-for="(item, index) in songSongsList" 
+      @click="initSelectPlay(item.id, index)">
         <div class="view-item-code">{{ index + 1 }}</div>
         <div class="view-item-song">
           <div class="song-name">{{ item.name }}</div>
@@ -14,6 +15,7 @@
 <script>
 import SongList from 'base/song-list/song-list'
 import { songInfoType, songSongsListType } from 'api/objectType.js'
+import {mapActions} from 'vuex'
 export default {
   data() {
     return {
@@ -43,7 +45,15 @@ export default {
       }).catch(error =>{
         console.log(errot)
       })
-    }
+    },
+    initSelectPlay(id, index) {
+      let sequenceList = this.songSongsList.slice()
+      let song = sequenceList[index]
+      this.selectPlay({index, song, sequenceList})
+    },
+    ...mapActions([
+      'selectPlay'
+    ])
   },
   components: {
     SongList
