@@ -68,12 +68,12 @@
 @import "~common/stylus/variable";
 @import "~common/stylus/mixin";
 .l-rank
-  overflow: hidden
+  /* overflow: hidden
   position: fixed
   top: 82px
   bottom: 0px
   width: 100%
-  background-color: $color-background
+  background-color: $color-background */
   .wrapper
     width: 100%
     position: fixed
@@ -84,6 +84,7 @@
       display: flex
       padding: 5px
       border-bottom: 1px solid $color-dialog-background
+      background-color: $color-background
       img
         width: 100px
         height: 100px

@@ -7,7 +7,7 @@
 <script>
 // 引入 better-scroll
 import BScroll from "better-scroll";
-
+import {mapGetters} from 'vuex'
 export default {
   props: {
     data: {
@@ -27,12 +27,18 @@ export default {
       default: 1
     }
   },
+  computed: {
+    ...mapGetters([
+      'fullScreen',
+      'currentSong'
+    ])
+  },
   created() {
   },
   data() {
     return {
       scroll: null
-    };
+    }
   },
   // 需要在 mounted 这个 生命周期中 实现
   //之所以要使用一个一次性定时器延迟20ms，是因为需要等一个nexttick（17ms）
@@ -40,6 +46,10 @@ export default {
   mounted() { 
     setTimeout(() => {
       this.initScroll()
+      if(!this.fullScreen) {
+        this.$refs.wrapper.className = this.$refs.wrapper.className + ' extra'
+      }
+      console.log(this.$refs.wrapper.className)
     }, 20)
   },
   methods: {
@@ -57,6 +67,9 @@ export default {
         this.scroll.on('scroll', (pos) => {
           me.$emit('scroll', pos)
         })
+        // this.scroll.on('touchEnd', (pos) => {
+        //   me.$emit('touchEnd', pos)
+        // })
       }
     },
     disable() {
@@ -64,6 +77,9 @@ export default {
     },
     enable() {
       this.scroll && this.scroll.enable()
+    },
+    destroy() {
+      this.destroy && this.scroll.destroy()
     },
     refresh() {
       this.scroll && this.scroll.refresh()
@@ -82,10 +98,18 @@ export default {
       setTimeout(() => {
         this.refresh()
       }, this.refreshDelay)
+    },
+    fullScreen(newValue, oldValue) {
+      if(!newValue) {
+        this.$refs.wrapper.className = this.$refs.wrapper.className + ' extra'
+        this.refresh()
+      }
     }
   }
 }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
+.extra
+  bottom: 50px!important
 </style>

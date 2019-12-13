@@ -46,11 +46,6 @@
        })
      },
      initSelectPlay(id, index) {
-      //  this.setSequenceList(this.singerSongsList)
-      //  this.setCurrentIndex(index)
-      //  this.setCurrentSong(this.singerSongsList[index])
-      //  this.setFullScreen(true)
-      
       let sequenceList = this.singerSongsList.slice()
       let song = sequenceList[index]
       this.selectPlay({index, song, sequenceList})

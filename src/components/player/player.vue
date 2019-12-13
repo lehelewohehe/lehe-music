@@ -1,8 +1,8 @@
 <template>
   <div class="l-player">
-    <div class="player-big" v-if="fullScreen">
+    <div class="player-big" v-if="fullScreen" :style="`background-image: url(${currentSong.al.picUrl})`">
       <div class="l-player-head">
-        <i class="fa fa-chevron-down" @click="setFullScreen(false)"></i>
+        <i class="fa fa-chevron-down" @click="changeFullScreen"></i>
         <div class="player-head-title">{{ currentSong.name }}</div>
       </div>
       <div class="l-player-content">
@@ -10,13 +10,19 @@
         <div class="player-content-view">
           <mt-swipe :auto="0">
             <mt-swipe-item>
-              <img :src="currentSong.al.picUrl" alt="">
+              <img :src="currentSong.al.picUrl" alt="" ref="bigImg" :class="{an: playing}">
             </mt-swipe-item>
-            <mt-swipe-item>2</mt-swipe-item>
+            <mt-swipe-item>
+              <scroll :data="lyric" ref="scroll">
+                <div class="lyric">
+                  <div class="lyric-item" v-for="item in lyric" :key="item.time">{{ item.oneLyric }}</div>
+                </div>
+              </scroll>
+            </mt-swipe-item>
           </mt-swipe>
         </div>
         <div class="player-content-progress">
-          <mt-range v-model="currentTime" :min="0" :max="maxTime">
+          <mt-range v-model="audio.currentTime" :min="0" :max="maxTime">
             <div slot="start">{{ currentTimeStr }}</div>
             <div slot="end">{{ durationStr }}</div>
           </mt-range>
@@ -29,13 +35,13 @@
           <i :class="{'btn-player': true, 'fa': true, 'fa-pause': !playing, 'fa-play': playing}" @click="changePlaying"></i>
           <!-- <i class="fa fa-play"></i> -->
           <i class="fa fa-forward" @click="switchSong({num: 1})"></i>
-          <i class="fa fa-heart-o btn-heart"></i>
+          <i class="fa fa-heart-o btn-heart" @click=""></i>
         </div>
       </div>
     </div>
     <div class="player-small" v-if="!fullScreen">
-        <div class="l-player-left" @click="setFullScreen(true)">
-          <img :src="currentSong.al.picUrl" alt="">
+        <div class="l-player-left" @click="changeFullScreen">
+          <img :src="currentSong.al.picUrl" alt="" ref="smallImg" :class="{an: playing}">
           <div class="player-left-info">
             <p>{{ currentSong.name }}</p>
             <p>{{ currentSong.author }}</p>
@@ -46,22 +52,26 @@
           <i class="fa fa-th-list"></i>
         </div>
     </div>
-    <audio :src="songInfo.url" @timeupdate="updateCurrentTime" @play="initAudioInfo" autoplay ref="audio" :loop="mode === MODE.LOOP" @ended="switchSong({num: 1})"></audio>
+    <audio :src="songInfo.url" @timeupdate="updateCurrentTime" @playing="initAudioInfo" autoplay ref="audio" :loop="mode === MODE.LOOP" @ended="switchSong({num: 1})"></audio>
   </div>
 </template>
 <script>
 import {mapGetters, mapMutations, mapActions} from 'vuex'
 import {MODE} from 'api/storeConfig'
-import {parseTime} from 'api/player'
+import {parseTime, parseLyric} from 'api/player'
+import Scroll from 'base/scroll/scroll'
 export default {
   data() {
     return {
+      lyric: [],
       songInfo: {},
       MODE: MODE,
       currentTimeStr: '00:00',
       durationStr: '00:00',
       maxTime: 100,
-      currentTime: 0
+      audio: {
+        currentTime: 0
+      }
     }
   },
   computed: {
@@ -71,12 +81,18 @@ export default {
       'playing',
       'favoriteList',
       'mode'
-  ]),
+  ])
 
   },
   created() {
     console.log(this.currentSong)
     this.getSongInfo()
+    this.getLyric()
+  },
+  mounted() {
+    this.audio = this.$refs.audio
+    // console.log(this.audio)
+    // console.log(this.$refs)
   },
   methods: {
     ...mapMutations({
@@ -97,6 +113,19 @@ export default {
         console.log(error)
       })
     },
+    getLyric() {
+      this.axios.get(`lyric?id=${this.currentSong.id}`)
+      .then(res => {
+        console.log(res)
+        if(res.data.code === 200) {
+          // this.lyric = res.data.lrc.lyric
+          // console.log(this.lyric)
+          this.lyric = parseLyric(res.data.lrc.lyric)
+        }
+      }).catch(error => {
+        console.log(error)
+      })
+    },
     changeMode() {
       let mode = (this.mode + 1) % 3 ? (this.mode + 1) % 3 : 3
       console.log(mode)
@@ -110,38 +139,56 @@ export default {
       }
       this.setPlaying(!this.playing)   
     },
+    changeFullScreen() {
+      this.setFullScreen(!this.fullScreen)
+    },
     initAudioInfo() {
-      let audio = this.$refs.audio
-      console.log(audio.duration)
-      this.maxTime = parseInt(audio.duration)
-      this.durationStr = parseTime(parseInt(audio.duration))
-      this.currentTimeStr = parseTime(parseInt(audio.currentTime))
+      this.maxTime = parseInt(this.audio.duration)
+      this.durationStr = parseTime(parseInt(this.audio.duration))
+      this.currentTimeStr = parseTime(parseInt(this.audio.currentTime))
+      if(this.fullScreen) {
+        this.lyric.forEach((item, index) => {
+        if(parseInt(item.time) === parseInt(this.audio.currentTime)) {
+          return this.$refs.scroll.scrollTo(0, (- index * 25), 500)
+        }
+      })
+      }
     },
     updateCurrentTime() {
-      let audio = this.$refs.audio
-      this.currentTimeStr = parseTime(parseInt(audio.currentTime))
-      this.currentTime = parseInt(audio.currentTime)
-    }
+      this.initAudioInfo()
+    },
+    // lyricPosition(pos) {
+    //   if(pos.y > 0) return
+    //   let index = parseInt((-pos.y) / 20)
+    //   this.audio.currentTime = this.lyric[index].time
+    // }
   },
   watch: {
-    currentSong : function() {
+    currentSong: function() {
       console.log(this.currentSong)
       this.getSongInfo()
+      this.getLyric()
     }
+  },
+  components: {
+    Scroll
   }
 }
 </script>
 <style lang="stylus" rel="stylesheet/stylus" scoped>
 @import "~common/stylus/variable";
+@import "~common/stylus/mixin";
 .l-player
   .player-big
     position: fixed
     top: 0
     bottom: 0
     width: 100%
-    background-color: $color-background-l
     height: 100%
     width: 100%
+    background-size: cover
+    background-color: $color-background
+    z-index: 1
     .l-player-head
       height: 40px
       font-size: 20px
@@ -165,27 +212,36 @@ export default {
       padding: 40px 30px 60px
       box-sizing: border-box
       height: 100%
+      background-color: $color-background-l
       .player-content-name
-        font-size: $font-size-small
+        font-size: $font-size-medium
         text-align: center
+        no-wrap()
         padding: 5px 0
       .player-content-view
         height: 75%
-        background-color: red
+        padding: 0 10px
+        /* background-color: red */
         .mint-swipe-item
-          display: flex
-          flex-direction: column
-          justify-content: center
+          text-align: center
+          padding: 25% 0 0
+          ver
           img
-            width: 100%
+            width: 80%
             height: auto
             border-radius: 50%
-          
+            box-shadow: 0px 0px 5px 5px #fff
+          .wrapper
+            width: 100%
+            height: 75%
+            .lyric
+              padding-bottom: 100%
+              .lyric-item
+                padding: 5px
+                height: 25px
+                box-sizing: border-box
       .player-content-progress
         padding: 15px 0
-        .mt-range-thumb
-          width: 5px
-          height: 5px
       .player-content-btn
         display: flex
         justify-content: space-between
@@ -254,4 +310,19 @@ export default {
           justify-content: center
           flex-direction: column
           margin-right: 5px
+
+@-webkit-keyframes rotation
+  from
+    transform: rotate(0deg)
+    -webkit-transform: rotate(0deg)
+  to 
+    transform: rotate(360deg)
+    -webkit-transform: rotate(360deg)
+.an
+  transform: rotate(360deg)
+  -webkit-transform: rotate(360deg)
+  animation: rotation 3s linear infinite forwards
+  -moz-animation: rotation 3s linear infinite forwards
+  -webkit-animation: rotation 3s linear infinite forwards
+  -o-animation: rotation 3s linear infinite forwards
 </style>

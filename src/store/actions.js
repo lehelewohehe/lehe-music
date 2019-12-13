@@ -1,4 +1,5 @@
 import {MODE} from 'api/storeConfig'
+import { Toast } from 'mint-ui'
 // 点击选择列表歌曲开始播放的多状态改变
 export const selectPlay = function({commit}, {index, song, sequenceList}) {
   commit('SET_PLAYING', true)
@@ -30,9 +31,14 @@ export const switchMode = function({commit, state}, {mode}) {
   commit('SET_MODE', mode)
   switch (mode) {
     case MODE.SEQUENCE:
-      commit('SET_CURRENTLIST', satte.sequenceList)
-      index = satte.sequenceList.indexOf(state.currentSong)
+      commit('SET_CURRENTLIST', state.sequenceList)
+      index = state.sequenceList.indexOf(state.currentSong)
       commit('SET_CURRENTINDEX', index)
+      Toast({
+        message: '顺序播放',
+        position: 'middle',
+        duration: 1000
+      })
       break;
     case MODE.RANDOM:
       let randomList = state.sequenceList.slice().sort(function(){return Math.random() - 0.5})
@@ -41,8 +47,18 @@ export const switchMode = function({commit, state}, {mode}) {
       commit('SET_RANDOMLIST', randomList)
       commit('SET_CURRENTLIST', randomList)
       commit('SET_CURRENTINDEX', index)
+      Toast({
+        message: '随机播放',
+        position: 'middle',
+        duration: 1000
+      })
       break;
     case MODE.LOOP:
+      Toast({
+        message: '单曲播放',
+        position: 'middle',
+        duration: 1000
+      })
       break;
     default:
       break;

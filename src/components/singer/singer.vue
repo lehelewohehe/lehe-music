@@ -118,18 +118,19 @@ export default {
 <style lang="stylus" rel="stylesheet/stylus" scoped>
 @import "~common/stylus/variable";
 .l-singer
-  overflow: hidden
+  /* overflow: hidden
   position: fixed
   top: 82px
   bottom: 0px
   width: 100%
-  background-color: $color-background
+  background-color: $color-background */
   .wrapper
     width: 100%
     position: fixed
     top: 82px
     bottom: 0px
     overflow: hidden
+    background-color: $color-background
     .singer-container
       width: 100%
       padding: 0 10px
