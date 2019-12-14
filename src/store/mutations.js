@@ -33,5 +33,8 @@ export default {
   },
   [type.SET_CURRENTLIST](state, currentList) {
     state.currentList = currentList
+  },
+  [type.DEL_CURRENTLIST_ONE](state, index) {
+    state.currentList.splice(index, 1) 
   }
 }

@@ -4,7 +4,7 @@
       <i class="fa fa-chevron-left" @click="goBack"></i>
       <div class="list-head-title">{{ info.name }}</div>
     </div>
-    <div class="song-list-bgm" ref="bgm" >
+    <div class="song-list-bgm" ref="bgm">
       <div class="list-bgm-img" :style="`background-image: url(${info.img1v1Url})`"></div>
       <div class="list-bgm-shelter"></div>
       <div class="list-bgm-play" ref="play" @click="initRandomPlay"><i class="fa fa-play-circle-o"></i>随机播放全部</div>

@@ -3,12 +3,14 @@ import { Toast } from 'mint-ui'
 import {saveFavoriteList, loadFavoriteList, loadSearchHistory} from 'api/localStorage'
 import { savePlayHistory, loadPlayHistory, saveSearchHistory} from '../api/localStorage'
 // 点击选择列表歌曲开始播放的多状态改变
-export const selectPlay = function({commit}, {index, song, sequenceList}) {
+export const selectPlay = function({commit,state}, {index, song, sequenceList}) {
+  if(state.currentIndex === -1) {
+    commit('SET_FULLSCREEN', true)
+  }
   commit('SET_PLAYING', true)
   commit('SET_CURRENTSONG', song)
   commit('SET_CURRENTINDEX', index)
   commit('SET_SEQUENCELIST', sequenceList)
-  commit('SET_FULLSCREEN', true)
   commit('SET_CURRENTLIST', sequenceList)
   savePlayHistory(song)
   commit('SET_PLAYHISTORY', loadPlayHistory())
@@ -73,6 +75,11 @@ export const switchMode = function({commit, state}, {mode}) {
 
 // 前后切换歌曲
 export const switchSong = function({commit, state}, {num}) {
+  if(state.currentList.length === 0) {
+    commit('SET_CURRENTINDEX', 0)
+    commit('SET_CURRENTSONG', state.currentSong)
+    return
+  }
   let index = state.currentIndex + num
   index = (index + state.currentList.length) % state.currentList.length
   commit('SET_CURRENTINDEX', index)
@@ -91,3 +98,20 @@ export const saveFavorite = function({commit}, {song}) {
 //   savePlayHistory(song)
 //   commit('SET_PLAYHISTORY', loadPlayHistory())
 // }
+
+
+export const deleteAll = function({commit,state}) {
+  commit('SET_SEQUENCELIST', [])
+  commit('SET_RANDOMLIST', [])
+  commit('SET_CURRENTLIST', [])
+}
+
+
+export const deleteOne = function({commit, state}, index) {
+  commit('DEL_CURRENTLIST_ONE', index)
+  if(state.currentIndex === index) {
+    index = (index + state.currentList.length) % state.currentList.length
+    commit('SET_CURRENTINDEX', index)
+    commit('SET_CURRENTSONG', state.currentList[state.currentIndex])
+  }
+}

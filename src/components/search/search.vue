@@ -13,8 +13,8 @@
           <a class="mint-cell" v-for="(item, index) in searchSongResult" @click="initSelectPlay(item.id, index)">
             <div class="mint-cell-wrapper">
               <i class="fa fa-music"></i>
-              <span class="mint-cell-text"> {{ item.title }}</span>
-              <div class="mint-cell-value"><span>{{ item.name }}</span></div> 
+              <span class="mint-cell-text"> {{ item.name }}</span>
+              <div class="mint-cell-value"><span>{{ item.author }}</span></div> 
             </div>
           </a>
         </div>

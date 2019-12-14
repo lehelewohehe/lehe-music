@@ -22,7 +22,6 @@
 .l-tab
   display: flex
   justify-content: space-between
-  
   div
     text-align: center
     line-height: 40px

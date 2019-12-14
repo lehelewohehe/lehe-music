@@ -12,7 +12,7 @@ import Singer from 'components/singer/singer'
 import SingerDetails from 'components/singer-details/singer-details'
 import SongsDetails from 'components/songs-details/songs-details'
 import RankDetails from 'components/rank-details/rank-details'
-
+import Personal from 'components/personal/personal'
 export default new Router({
   routes: [
     {
@@ -53,6 +53,11 @@ export default new Router({
       path: '/rank/:id',
       name: 'rankDetails',
       component: RankDetails
+    },
+    {
+      path: '/personal',
+      name: 'personal',
+      component: Personal
     }
   ]
 })

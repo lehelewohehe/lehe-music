@@ -1,7 +1,7 @@
 <template>
   <div class="l-slider" ref="slider">
     <mt-swipe :auto="4000" >
-        <mt-swipe-item v-for="(item, index) in imgs" :key="imgs.pic" ><a :href="item.url"  :ref="'b' + index" class="needsclick"><img :src="item.pic" alt=""></a></mt-swipe-item>
+        <mt-swipe-item v-for="(item, index) in imgs" :key="imgs.pic" ><a :href="item.url"  :ref="'b' + index" class="needsclick"><img :src="item.pic" alt="" @load="imgLoad"></a></mt-swipe-item>
     </mt-swipe>
   </div>
 </template>
@@ -9,7 +9,6 @@
  export default {
    data() {
      return {
-       sliderHeight: 0
      }
    },
    props: {
@@ -18,17 +17,30 @@
       default: null
      }
    },
+   created() {
+    this.flag = true
+   },
    mounted() {
-    setTimeout( () => {
-      this.setSliderHeight()
-    }, 200)
+    // setTimeout( () => {
+    //   this.setSliderHeight()
+    // }, 200)
    },
    methods: {
-     setSliderHeight() {
-       this.sliderHeight = this.$refs.b0[0].childNodes[0].clientHeight
-      //  console.log(this.$refs.b0)
-       console.log(this.$refs.b0[0].childNodes[0].clientHeight)
-       this.$refs.slider.style.height = this.sliderHeight + 'px'
+     setSliderHeight(e) {
+       let naturalHeight = this.$refs.b0[0].childNodes[0].naturalHeight
+       let naturalWidth = this.$refs.b0[0].childNodes[0].naturalWidth
+      //  console.log(naturalHeight, naturalWidth)
+       let currentWidth = e.path[9].clientWidth
+       let currentHeight = parseInt(currentWidth / naturalWidth * naturalHeight * 0.98)
+      //  console.log(currentHeight)
+       this.$refs.slider.style.height = currentHeight + 'px'
+     },
+     imgLoad(e) {
+      //  console.log(e)
+       if(this.flag) {
+         this.setSliderHeight(e)
+         this.flag = false
+       } 
      }
    },
    watch: {

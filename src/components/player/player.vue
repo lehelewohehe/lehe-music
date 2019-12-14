@@ -32,7 +32,7 @@
           <i :class="{'fa': true, 'fa-refresh': mode === MODE.SEQUENCE, 'fa-random': mode === MODE.RANDOM, 'fa-repeat': mode === MODE.LOOP }" @click="changeMode"></i>
           <!-- <i class="fa fa-repeat"></i> -->
           <i class="fa fa-backward" @click="switchSong({num: -1})"></i>
-          <i :class="{'btn-player': true, 'fa': true, 'fa-pause': !playing, 'fa-play': playing}" @click="changePlaying"></i>
+          <i :class="{'btn-player': true, 'fa': true, 'fa-pause': playing, 'fa-play': !playing}" @click="changePlaying"></i>
           <!-- <i class="fa fa-play"></i> -->
           <i class="fa fa-forward" @click="switchSong({num: 1})"></i>
           <i :class="{'btn-heart': true, 'fa': true, 'fa-heart-o': !isFavorite, 'fa-heart': isFavorite, 'red': isFavorite }" @click="saveFavorite({song:currentSong})"></i>
@@ -48,10 +48,11 @@
           </div>
         </div>
         <div class="l-player-right">
-          <i :class="{'fa': true, 'fa-pause': !playing, 'fa-play': playing}" @click="changePlaying"></i>
-          <i class="fa fa-th-list"></i>
+          <i :class="{'fa': true, 'fa-pause': playing, 'fa-play': !playing}" @click="changePlaying"></i>
+          <i class="fa fa-th-list" @click="changeHide"></i>
         </div>
     </div>
+    <current-playlist v-if="!fullScreen && hide"  @click="Hide"></current-playlist>
     <audio :src="songInfo.url" @timeupdate="updateCurrentTime" @playing="initAudioInfo" autoplay ref="audio" :loop="mode === MODE.LOOP" @ended="switchSong({num: 1})"></audio>
   </div>
 </template>
@@ -60,6 +61,7 @@ import {mapGetters, mapMutations, mapActions} from 'vuex'
 import {MODE} from 'api/storeConfig'
 import {parseTime, parseLyric} from 'api/player'
 import Scroll from 'base/scroll/scroll'
+import CurrentPlaylist from 'components/current-playlist/current-playlist'
 export default {
   data() {
     return {
@@ -71,7 +73,8 @@ export default {
       maxTime: 100,
       audio: {
         currentTime: 0
-      }
+      },
+      hide: false
     }
   },
   computed: {
@@ -162,6 +165,13 @@ export default {
     },
     updateCurrentTime() {
       this.initAudioInfo()
+    },
+    Hide() {
+      this.hide = false
+      console.log(1111111111)
+    },
+    changeHide() {
+      this.hide = !this.hide
     }
     // lyricPosition(pos) {
     //   if(pos.y > 0) return
@@ -177,7 +187,8 @@ export default {
     }
   },
   components: {
-    Scroll
+    Scroll,
+    CurrentPlaylist
   }
 }
 </script>

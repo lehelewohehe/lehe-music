@@ -126,10 +126,9 @@ export let rankId = {
 export class searchSongListType {
   constructor({id, name, artists}) {
     this.id = id,
-    this.title = name,
-    this.artists = artists
-    this.name = spliceSring(artists),
-    this.author = this.name
+    this.name = name,
+    this.artists = artists,
+    this.author = spliceSring(artists),
     this.type = 1,
     this.al = { picUrl: 'https://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg' }
   }

@@ -51,13 +51,6 @@
       let song = sequenceList[index]
       this.selectPlay({index, song, sequenceList})
      },
-    // ...mapMutations({
-    //   setFullScreen: 'SET_FULLSCREEN',
-    //   setSequenceList: 'SET_SEQUENCELIST',
-    //   setPlaying: 'SET_PLAYING',
-    //   setCurrentIndex: 'SET_CURRENTINDEX',
-    //   setCurrentSong: 'SET_CURRENTSONG'
-    // })
     ...mapActions([
       'selectPlay'
     ])
