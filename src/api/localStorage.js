@@ -61,7 +61,28 @@ export const saveFavoriteList = function(song) {
 }
 
 // 保存搜索列表
-export const saveSearchHistory = function(song) {
+export const saveSearchHistory = function(value) {
   let searchHistory = localStorage.getItem('searchHistory') || '[]'
-
+  let searchArr = JSON.parse(searchHistory)
+  let flag = searchArr.findIndex(function(item){
+    return item === value
+  })
+  if(flag === -1) {
+    searchArr.unshift(value)
+  } else {
+    searchArr.splice(flag, 1)
+    searchArr.unshift(value)
+  }
+  localStorage.setItem('searchHistory',JSON.stringify(searchArr))
+}
+// 删除一条搜索列表数据
+export const deleteSearchHistory = function(index) {
+  let searchHistory = localStorage.getItem('searchHistory') || '[]'
+  let searchArr = JSON.parse(searchHistory)
+  if(index) {
+    searchArr.splice(index, 1)
+  } else {
+    searchArr = []
+  }
+  localStorage.setItem('searchHistory',JSON.stringify(searchArr))
 }

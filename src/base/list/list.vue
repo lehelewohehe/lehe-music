@@ -9,11 +9,12 @@
         </div>
       </div>
       <div class="list-view-content">
-        <div class="content-name">{{ item.name }}</div>
+        <div class="content-name" v-if="name">{{ item.name }}</div>
+        <div class="content-name" v-if="!name">{{ item }}</div>
         <div class="content-author" v-if="author">{{ item.author }}</div>
       </div>
       <div class="list-view-btn" v-if="btn">
-        <i class="fa fa-times" @click.stop.prevent="deleteOne(num)"></i>
+        <i class="fa fa-times" @click.stop.prevent="send(num)"></i>
       </div>
     </div>
   </div>
@@ -53,23 +54,31 @@
     str: {
       type: String,
       default: ''
+    },
+    name: {
+      type: Boolean,
+      default: true
     }
    },
    created() {
    },
    methods: {
      initSelectPlay(id, index) {
-       console.log(this.data)
-       console.log(id, index)
-      let sequenceList = this.data.slice()
-      console.log(sequenceList)
-      let song = sequenceList[index]
-      console.log(song)
-      this.selectPlay({index, song, sequenceList})
+       if(id) {
+         console.log(this.data)
+         console.log(id, index)
+         let sequenceList = this.data.slice()
+         console.log(sequenceList)
+         let song = sequenceList[index]
+         console.log(song)
+         this.selectPlay({index, song, sequenceList})
+       }
+     },
+     send(num) {
+       this.$emit('click', {index: num})
      },
     ...mapActions([
-      'selectPlay',
-      'deleteOne'
+      'selectPlay'
     ])
    },
    computed: {
@@ -89,6 +98,7 @@
    padding: 10px
    box-sizing: border-box
    overflow: hidden
+   justify-content: space-between
    .list-view-code
      display: flex
      justify-content: center
@@ -108,11 +118,12 @@
      .content-author
        no-wrap()
 .playlist
+.searchHistory
   .list-view-btn
     text-align: right
     width: 10%
   .list-view-content
-    width: 70%
+    width: 75%
   .list-view-content
   .list-view-btn
     justify-content: center!important
@@ -122,4 +133,12 @@
       display: inline-block
       text-align: center
       line-height: 30px
+.searchHistory
+  .l-list-item
+    padding: 5px 20px
+    height: 30px
+.playlist
+  .l-list-item
+    padding: 5px 10px
+    height: 30px
 </style>

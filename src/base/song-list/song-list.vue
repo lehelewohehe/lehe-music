@@ -81,6 +81,7 @@ export default {
 </script>
 <style lang="stylus" rel="stylesheet/stylus" scoped>
 @import "~common/stylus/variable";
+@import '~common/stylus/mixin';
 .l-song-list
   position: fixed
   top: 0
@@ -95,6 +96,7 @@ export default {
     text-align: center
     width: 100%
     z-index: 2
+    no-wrap()
     i
     .fa-chevron-left:before
       color: $color-theme

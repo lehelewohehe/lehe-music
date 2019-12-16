@@ -1,7 +1,8 @@
 import {MODE} from 'api/storeConfig'
 import { Toast } from 'mint-ui'
 import {saveFavoriteList, loadFavoriteList, loadSearchHistory} from 'api/localStorage'
-import { savePlayHistory, loadPlayHistory, saveSearchHistory} from '../api/localStorage'
+import { savePlayHistory, loadPlayHistory, saveSearchHistory, deleteSearchHistory} from '../api/localStorage'
+import { currentIndex } from './getters'
 // 点击选择列表歌曲开始播放的多状态改变
 export const selectPlay = function({commit,state}, {index, song, sequenceList}) {
   if(state.currentIndex === -1) {
@@ -94,24 +95,38 @@ export const saveFavorite = function({commit}, {song}) {
 
 
 // 更新播放历史
-// export const savePlay = function({commit}, {song}) {
-//   savePlayHistory(song)
-//   commit('SET_PLAYHISTORY', loadPlayHistory())
-// }
+export const savePlay = function({commit}, {song}) {
+  savePlayHistory(song)
+  commit('SET_PLAYHISTORY', loadPlayHistory())
+}
 
-
-export const deleteAll = function({commit,state}) {
+// 删除当前播放列表所有歌曲
+export const deleteAllPlaylist = function({commit,state}) {
   commit('SET_SEQUENCELIST', [])
   commit('SET_RANDOMLIST', [])
   commit('SET_CURRENTLIST', [])
 }
 
-
-export const deleteOne = function({commit, state}, index) {
+// 删除当前播放列表一条歌曲
+export const deleteOnePlaylist = function({commit, state}, {index}) {
+  console.log(index)
   commit('DEL_CURRENTLIST_ONE', index)
-  if(state.currentIndex === index) {
+  if(state.currentIndex >= index) {
     index = (index + state.currentList.length) % state.currentList.length
     commit('SET_CURRENTINDEX', index)
     commit('SET_CURRENTSONG', state.currentList[state.currentIndex])
-  }
+  } 
+}
+
+// 更新当前搜索历史
+export const saveSearch = function({commit}, {value}) {
+  saveSearchHistory(value)
+  commit('SET_SEARCHHISTORY', loadSearchHistory())
+}
+
+// 删除一条或全部搜索历史
+export const deleteOneSearch = function({commit}, {index}) {
+  console.log(index)
+  deleteSearchHistory(index)
+  commit('SET_SEARCHHISTORY', loadSearchHistory())
 }

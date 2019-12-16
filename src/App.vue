@@ -14,6 +14,7 @@ import LHeader from 'components/l-header/l-header'
 import Tab from 'components/tab/tab'
 import Player from 'components/player/player'
 import {mapGetters} from 'vuex'
+import 'common/stylus/index.styl'
 export default {
   name: 'App',
   components: {
@@ -30,7 +31,6 @@ export default {
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-@import "~common/stylus/index";
 /* 可以设置不同的进入和离开动画 */
 /* 设置持续时间和动画函数 */
 .lehe-enter-active 

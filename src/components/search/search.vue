@@ -3,14 +3,14 @@
     <mt-search v-model="value">
       <scroll :data="searchSingerResult" v-if="value.length">
         <div class="search-data-container" >
-          <a class="mint-cell" v-for="item in searchSingerResult" @click="goSingerDetails(item.id)">
+          <a class="mint-cell" v-for="item in searchSingerResult" @click="goSingerDetails(item.id, value)">
             <div class="mint-cell-wrapper">
               <i class="fa fa-user"></i>
               <span class="mint-cell-text">{{ item.name }}</span>
               <div class="mint-cell-value"><span></span></div> 
             </div>
           </a>
-          <a class="mint-cell" v-for="(item, index) in searchSongResult" @click="initSelectPlay(item.id, index)">
+          <a class="mint-cell" v-for="(item, index) in searchSongResult" @click="initSelectPlay(item.id, index, value)">
             <div class="mint-cell-wrapper">
               <i class="fa fa-music"></i>
               <span class="mint-cell-text"> {{ item.name }}</span>
@@ -22,13 +22,15 @@
     </mt-search>
     <div class="hot-key" v-if="!value.length">
       <span class="hot-key-item needsclick" v-for="item in hotKey" @click="autoFillKey">{{ item.first }}</span>
-    </div>  
+    </div>
+    <search-history v-if="!value.length"></search-history>
   </div>
 </template>
 <script>
 import { searchSongListType, searchSingerListType } from 'api/objectType.js'
 import Scroll from 'base/scroll/scroll'
 import Loading from 'base/loading/loading'
+import SearchHistory from 'components/search-history/search-history'
 import {mapActions} from 'vuex'
 export default {
   data() {
@@ -90,16 +92,23 @@ export default {
       console.log(e.target.innerHTML)
       this.value = e.target.innerHTML
     },
-    initSelectPlay(id, index) {
+    initSelectPlay(id, index, value) {
+      if(value.length) {
+        this.saveSearch({value})
+      }
       let sequenceList = this.searchSongResult.slice()
       let song = sequenceList[index]
       this.selectPlay({index, song, sequenceList})
     },
-    goSingerDetails(id) {
+    goSingerDetails(id, value) {
+      if(value.length) {
+        this.saveSearch({value})
+      }
       this.$router.push({ name: "singerDetails", params: { id } })
     },
     ...mapActions([
-      'selectPlay'
+      'selectPlay',
+      'saveSearch'
     ])
   },
   watch: {
@@ -109,17 +118,25 @@ export default {
   },
   components: {
     Scroll,
-    Loading
+    Loading,
+    SearchHistory
   }
 }
 </script>
-<style lang="stylus" rel="stylesheet/stylus" >
-@import "~common/stylus/variable";
-@import "~common/stylus/mixin";
+<style lang="stylus" rel="stylesheet/stylus">
+@import '~common/stylus/variable.styl';
+@import '~common/stylus/mixin.styl';
 .l-search
+  position: fixed
   padding: 10px
+  top: 82px
+  bottom: 0
+  z-index: 0
+  left: 0
+  right: 0
+  border-sizing: border-box
   .mint-search
-    height: 100%
+    height: 48px
   .mint-searchbar
     background-color: $color-highlight-background
     border-radius: 5px
@@ -151,6 +168,7 @@ export default {
       padding: 0 10px
       left: 0
       box-sizing: border-box
+      z-index: 1
   .hot-key
     display: flex
     margin-top: 20px

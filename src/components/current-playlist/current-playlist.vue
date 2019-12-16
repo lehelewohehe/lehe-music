@@ -3,10 +3,10 @@
     <div class="container an" @click.stop.prevent>
       <div class="current-playlist-play" ref="play">
           <i :class="{'fa': true, 'fa-refresh': mode === MODE.SEQUENCE, 'fa-random': mode === MODE.RANDOM, 'fa-repeat': mode === MODE.LOOP }" @click="changeMode"></i>
-          <i class="fa fa-trash-o" @click="deleteAll"></i>
+          <i class="fa fa-trash-o" @click="deleteAllPlaylist"></i>
       </div>
       <scroll :data="currentList">
-        <list :data="currentList" :code="true" :icon="true" :btn="true" class="playlist"></list>
+        <list :data="currentList" :code="true" :icon="true" :btn="true" class="playlist" @click="deleteOnePlaylist"></list>
       </scroll>
       <div class="current-playlist-close" @click="close">
         关闭
@@ -39,8 +39,8 @@ export default {
     },
     ...mapActions([
       'switchMode',
-      'deleteAll',
-      'deleteOne'
+      'deleteAllPlaylist',
+      'deleteOnePlaylist'
     ]),
     ...mapMutations({
       setCurrentList: 'SET_CURRENTLIST'
