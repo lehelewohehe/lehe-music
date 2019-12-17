@@ -1,7 +1,11 @@
 <template>
   <div class="l-search">
     <mt-search v-model="value">
-      <scroll :data="searchSingerResult" v-if="value.length">
+      <scroll 
+      :data="searchSongResult" 
+      v-if="value.length" 
+      @pullingUp="getSearchResultAgain" 
+      :pullUpLoad="{threshold: -90, moreTxt: '加载更多', noMoreTxt: '没有更多数据了'}">
         <div class="search-data-container" >
           <a class="mint-cell" v-for="item in searchSingerResult" @click="goSingerDetails(item.id, value)">
             <div class="mint-cell-wrapper">
@@ -17,6 +21,7 @@
               <div class="mint-cell-value"><span>{{ item.author }}</span></div> 
             </div>
           </a>
+          <loading class="search-loading"></loading>
         </div>
       </scroll>
     </mt-search>
@@ -31,7 +36,7 @@ import { searchSongListType, searchSingerListType } from 'api/objectType.js'
 import Scroll from 'base/scroll/scroll'
 import Loading from 'base/loading/loading'
 import SearchHistory from 'components/search-history/search-history'
-import {mapActions} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 export default {
   data() {
     return {
@@ -39,6 +44,7 @@ export default {
       searchSongResult: [],
       searchSingerResult: [],
       hotKey: [],
+      offset: 1
     }
   },
   created() {
@@ -46,7 +52,8 @@ export default {
   },
   methods: {
     getSearchResult() {
-      this.axios.get(`search?keywords=${this.value}`).
+      if(!this.value.length) return
+      this.axios.get(`search?keywords=${this.value}&offset=${this.offset}`).
       then(res => {
         console.log(res)
         let temp = []
@@ -92,6 +99,24 @@ export default {
       console.log(e.target.innerHTML)
       this.value = e.target.innerHTML
     },
+    getSearchResultAgain() {
+      console.log('1111')
+      this.offset++
+      this.axios.get(`search?keywords=${this.value}&offset=${this.offset}`).
+      then(res => {
+        console.log(res)
+        let temp = []
+        if(res.data.code === 200) {
+          res.data.result.songs.forEach(item => {
+            temp.push(new searchSongListType(item))
+          })
+          this.searchSongResult = this.searchSongResult.concat(temp)
+          console.log(this.searchSongResult)
+        }
+      }).catch(error => {
+        console.log(error)
+      })
+    },
     initSelectPlay(id, index, value) {
       if(value.length) {
         this.saveSearch({value})
@@ -114,7 +139,15 @@ export default {
   watch: {
     value: function() {
       this.getSearchResult()
+    },
+    transmit: function(newValue) {
+      this.value = newValue
     }
+  },
+  computed: {
+    ...mapGetters([
+      'transmit'
+    ])
   },
   components: {
     Scroll,
@@ -145,6 +178,9 @@ export default {
       background-color: $color-highlight-background
       i
         font-size: $font-size-medium-x
+        display: flex
+        justify-content: center
+        flex-direction: column
         height: 100%
       .mint-searchbar-core
         border: 2px solid $color-theme
@@ -169,6 +205,15 @@ export default {
       left: 0
       box-sizing: border-box
       z-index: 1
+      .search-data-container
+        position: relative
+        .search-loading 
+          position: absolute
+          bottom: -40px
+          width: 20px
+          height: 20px
+          left: 50%
+          transform: translateX(-50%)
   .hot-key
     display: flex
     margin-top: 20px

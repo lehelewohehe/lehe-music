@@ -5,7 +5,12 @@
         <i class="fa fa-trash-o" @click="deleteOneSearch"></i>
     </div>
     <scroll :data="searchHistory">
-        <list :data="searchHistory" :name="false"  :btn="true" class="searchHistory" @click="deleteOneSearch"></list>
+        <list 
+        :data="searchHistory" 
+        :name="false"  
+        :btn="true" 
+        class="searchHistory" 
+        @click="deleteOneSearch"></list>
     </scroll>
   </div>
 </template>
@@ -22,7 +27,10 @@ export default {
   methods: {
     ...mapActions([
       'deleteOneSearch'
-    ])
+    ]),
+    getkey(value) {
+      this
+    }
   },
   components: {
     List,

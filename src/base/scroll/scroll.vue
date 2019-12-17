@@ -25,6 +25,10 @@ export default {
     probeType: {
       type: Number,
       default: 1
+    },
+    pullUpLoad: {
+      type: Object,
+      default: null
     }
   },
   computed: {
@@ -59,13 +63,17 @@ export default {
       }
       this.scroll = new BScroll(this.$refs.wrapper, {
         click: this.click,
-        probeType: this.probeType
+        probeType: this.probeType,
+        pullUpLoad: this.pullUpLoad
       })
       //监听scroll事件并且将其派发个父组件处理
       if (this.scroll) {
         let me = this
         this.scroll.on('scroll', (pos) => {
           me.$emit('scroll', pos)
+        })
+        this.scroll.on('pullingUp', () => {
+          me.$emit('pullingUp')
         })
         // this.scroll.on('touchEnd', (pos) => {
         //   me.$emit('touchEnd', pos)

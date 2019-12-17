@@ -15,6 +15,7 @@ import Tab from 'components/tab/tab'
 import Player from 'components/player/player'
 import {mapGetters} from 'vuex'
 import 'common/stylus/index.styl'
+import 'common/css/font-awesome.css'
 export default {
   name: 'App',
   components: {

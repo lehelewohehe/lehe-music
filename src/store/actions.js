@@ -2,13 +2,13 @@ import {MODE} from 'api/storeConfig'
 import { Toast } from 'mint-ui'
 import {saveFavoriteList, loadFavoriteList, loadSearchHistory} from 'api/localStorage'
 import { savePlayHistory, loadPlayHistory, saveSearchHistory, deleteSearchHistory} from '../api/localStorage'
-import { currentIndex } from './getters'
 // 点击选择列表歌曲开始播放的多状态改变
 export const selectPlay = function({commit,state}, {index, song, sequenceList}) {
   if(state.currentIndex === -1) {
     commit('SET_FULLSCREEN', true)
   }
   commit('SET_PLAYING', true)
+  commit('SET_MODE', MODE.SEQUENCE)
   commit('SET_CURRENTSONG', song)
   commit('SET_CURRENTINDEX', index)
   commit('SET_SEQUENCELIST', sequenceList)
@@ -22,6 +22,7 @@ export const randomPlay = function ({commit}, {sequenceList}) {
   commit('SET_SEQUENCELIST', sequenceList)
   commit('SET_FULLSCREEN', true)
   commit('SET_PLAYING', true)
+  commit('SET_MODE', MODE.SEQUENCE)
   // sequenceList随机排序赋值给随机列表
   let randomList = sequenceList.slice().sort(function(){return Math.random() - 0.5})
   let index = Math.floor(Math.random() * randomList.length)
@@ -101,7 +102,7 @@ export const savePlay = function({commit}, {song}) {
 }
 
 // 删除当前播放列表所有歌曲
-export const deleteAllPlaylist = function({commit,state}) {
+export const deleteAllPlaylist = function({commit}) {
   commit('SET_SEQUENCELIST', [])
   commit('SET_RANDOMLIST', [])
   commit('SET_CURRENTLIST', [])

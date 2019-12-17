@@ -75,7 +75,7 @@ export const saveSearchHistory = function(value) {
   }
   localStorage.setItem('searchHistory',JSON.stringify(searchArr))
 }
-// 删除一条搜索列表数据
+// 删除一条或搜索列表数据
 export const deleteSearchHistory = function(index) {
   let searchHistory = localStorage.getItem('searchHistory') || '[]'
   let searchArr = JSON.parse(searchHistory)

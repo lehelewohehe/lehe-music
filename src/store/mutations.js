@@ -36,5 +36,8 @@ export default {
   },
   [type.DEL_CURRENTLIST_ONE](state, index) {
     state.currentList.splice(index, 1) 
+  },
+  [type.SET_TRANSMIT](state, value) {
+    state.transmit = value
   }
 }

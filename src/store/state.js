@@ -1,5 +1,5 @@
 import { MODE } from 'api/storeConfig'
-import {loadPlayHistory, loadFavoriteList, loadSearchHistory } from 'api/localStorage'
+import { loadPlayHistory, loadFavoriteList, loadSearchHistory } from 'api/localStorage'
 
 export default  {
   playing: true,   //播放状态
@@ -12,5 +12,6 @@ export default  {
   fullScreen: true,   //播放器状态
   playHistory: loadPlayHistory(),   //  播放历史
   favoriteList: loadFavoriteList(), //  喜爱列表
-  searchHistory: loadSearchHistory() // 搜索历史
+  searchHistory: loadSearchHistory(), // 搜索历史
+  transmit: ''      // 作为公共变量使用，用于相隔几个组件传递值
 }

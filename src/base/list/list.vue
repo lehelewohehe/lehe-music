@@ -1,7 +1,7 @@
 <template>
   <div class="l-list">
     <div class="l-list-item" v-for="(item, num) in data" 
-    @click="initSelectPlay(item.id, num)">
+    @click="initSelectPlay(item.id, num, item)">
       <div class="list-view-code" v-if="code">
         <div class="index" v-if="index">{{ num + 1 }}</div>
         <div class="icon" v-if="icon">
@@ -20,7 +20,7 @@
   </div>
 </template>
 <script>
- import {mapGetters, mapActions} from 'vuex'
+ import {mapGetters, mapActions, mapMutations} from 'vuex'
  export default {
    data() {
      return {
@@ -63,7 +63,7 @@
    created() {
    },
    methods: {
-     initSelectPlay(id, index) {
+     initSelectPlay(id, index, item) {
        if(id) {
          console.log(this.data)
          console.log(id, index)
@@ -72,6 +72,8 @@
          let song = sequenceList[index]
          console.log(song)
          this.selectPlay({index, song, sequenceList})
+       } else {
+        this.setTransmit(new String(item))
        }
      },
      send(num) {
@@ -79,7 +81,10 @@
      },
     ...mapActions([
       'selectPlay'
-    ])
+    ]),
+    ...mapMutations({
+      setTransmit: 'SET_TRANSMIT'
+    })
    },
    computed: {
      ...mapGetters([
